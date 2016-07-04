@@ -8,20 +8,14 @@ router.post('/', function(req, res) {
     "response": {
       "outputSpeech": {
         "type": "PlainText",
-        "text": "Welcome to the Alexa Skills Kit, you can say hello"
+        "text": "Sure thing"
       },
       "card": {
         "type": "Simple",
         "title": "HelloWorld",
         "content": "Welcome to the Alexa Skills Kit, you can say hello"
       },
-      "reprompt": {
-        "outputSpeech": {
-          "type": "PlainText",
-          "text": "Welcome to the Alexa Skills Kit, you can say hello"
-        }
-      },
-      "shouldEndSession": false
+      "shouldEndSession": true
     },
     "sessionAttributes": {}
   });
