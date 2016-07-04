@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<meta charset="utf8">
+<style>
+    .container {
+        margin-top: 200px;
+        border-right: 1px solid brown;
+        width: 550px;
+        height: 360px;
+        position: relative;
+    }
+
+    .container div {
+        position: absolute;
+        box-sizing: border-box;
+        width: 130px;
+        height: 130px;
+        border: 10px solid black;
+    }
+
+    #one {
+        background: blue;
+        left: 20px;
+        bottom: 0;
+    }
+
+    #two {
+        background: beige;
+        top: -20px;
+        left: 210px;
+    }
+
+    #three {
+        background: white;
+        right: 20px;
+        bottom: 60px;
+    }
+</style>
+<body>
+    <div class="container">
+        <div id="one"></div>
+        <div id="two"></div>
+        <div id="three"></div>
+    </div>
+</body>
