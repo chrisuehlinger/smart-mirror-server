@@ -1,5 +1,6 @@
 
 
+var debug = require('debug')('expressapp');
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -10,6 +11,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/user');
 var api = require('./routes/api');
+
 
 var app = express();
 
@@ -69,5 +71,24 @@ app.use(function(err, req, res, next) {
     });
 });
 
+app.set('port', process.env.PORT || 3001);
+
+var server = app.listen(app.get('port'), function() {
+  debug('Express server listening on port ' + server.address().port);
+});
+
+// Socket IO setup
+
+var io = require('socket.io')(server);
+
+io.sockets.on('connection', function (socket) {
+    console.log('socket connected');
+
+    socket.on('disconnect', function () {
+        console.log('socket disconnected');
+    });
+
+    socket.emit('text', 'wow. such event. very real time.');
+});
 
 module.exports = app;
