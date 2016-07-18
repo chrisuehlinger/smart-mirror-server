@@ -4,6 +4,6 @@ var router = express.Router();
 var weather = require('./intents/weather');
 
 /* GET users listing. */
-router.post('/weather', weather);
+router.all('/weather', weather);
 
 module.exports = router;
