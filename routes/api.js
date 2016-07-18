@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET users listing. */
 router.post('/', function(req, res) {
-  console.log(req);
+  console.log(req.body.request.intent);
   res.json({
     "version": "1.0",
     "response": {
