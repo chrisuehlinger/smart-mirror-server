@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var weather = require('./intents/weather');
+var hackerNews = require('./intents/hacker-news');
 
 /* GET users listing. */
 router.post('/', function(req, res) {
@@ -9,6 +10,8 @@ router.post('/', function(req, res) {
   console.log(intent.name);
   if(intent.name === 'WeatherIntent') {
     weather(req, res);
+  } else if(intent.name === 'HackerNewsIntent') {
+    hackerNews(req, res);
   } else {
     res.json({
       "version": "1.0",
