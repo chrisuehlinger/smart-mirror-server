@@ -5,7 +5,7 @@ module.exports = function weather(req, res) {
       "response": {
         "outputSpeech": {
           "type": "PlainText",
-          "text": "Sure thing, here\'s the weather.'
+          "text": "Sure thing, here\'s the weather."
         },
         "card": {
           "type": "Simple",
