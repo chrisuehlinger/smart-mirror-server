@@ -1,31 +1,41 @@
-var request = require('request');
+var api = require("hackernews-api");
+var html2text = require("html-to-text");
 
 module.exports = function hackerNews(req, res) {
-  // request('https://api.forecast.io/forecast/' + process.env.FORECAST_IO_API_KEY + '/39.2882,-76.6286', function(error, response, body){
-    var summary = 'Welcome to Hacker News!';
-    // if(error) {
-    //   console.error(error);
-    //   summary = 'There was an error trying to retrieve the weather';
-    // }else {
-      
-    // }
+  //TODO: Make all of this async, this could probably perform much better.
+
+  var summary = 'Today\'s Top Hacker News Stories:\n';
+  api.getTopStories().slice(0,10).forEach(function(id, i){ 
+    var story = api.getItem(id);
+    summary += 'Number ' + (i+1) + ': ' + story.title + '\n';
     
-    res.json({
-      "version": "1.0",
-      "response": {
-        "outputSpeech": {
-          "type": "PlainText",
-          "text": summary 
-        },
-        "card": {
-          "type": "Simple",
-          "title": "HelloWorld",
-          "content": summary
-        },
-          "shouldEndSession": true
+    if(story.kids && story.kids.length) {
+      var topComment = api.getItem(story.kids[0]);
+      if(topComment && topComment.text) {
+        var topCommentText = topComment.text;
+        topCommentText = topCommentText.replace(/<i>&gt;/, '<i> Quote: ');
+        topCommentText = topCommentText.slice(0,topCommentText.indexOf('<p>', topCommentText.indexOf('<p>')+1));
+        topCommentText = html2text.fromString(topCommentText);
+        summary += 'Top Comment: ' + topCommentText + '\n';
+      }
+    }
+  });
+    
+  res.json({
+    "version": "1.0",
+    "response": {
+      "outputSpeech": {
+        "type": "PlainText",
+        "text": summary 
       },
-      "sessionAttributes": {}
-      });
-      res.end();
-    // });
+      "card": {
+        "type": "Simple",
+        "title": "HelloWorld",
+        "content": summary
+      },
+        "shouldEndSession": true
+    },
+    "sessionAttributes": {}
+  });
+  res.end();
 };
