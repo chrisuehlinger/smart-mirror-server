@@ -26,8 +26,8 @@ module.exports = function hackerNews(req, res) {
     "version": "1.0",
     "response": {
       "outputSpeech": {
-        "type": "PlainText",
-        "text": summary 
+        "type": "SSML",
+        "ssml": '<speak>' + summary + '</speak>' 
       },
       "card": {
         "type": "Simple",
