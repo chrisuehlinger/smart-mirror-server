@@ -4,10 +4,10 @@ var html2text = require("html-to-text");
 module.exports = function hackerNews(req, res) {
   //TODO: Make all of this async, this could probably perform much better.
 
-  var summary = 'Today\'s Top Hacker News Stories:\n';
+  var summary = 'Today\'s Top Hacker News Stories: ';
   api.getTopStories().slice(0,10).forEach(function(id, i){ 
     var story = api.getItem(id);
-    summary += 'Number ' + (i+1) + ': ' + story.title + '\n';
+    summary += 'Number ' + (i+1) + ': ' + story.title + ' ';
     
     if(story.kids && story.kids.length) {
       var topComment = api.getItem(story.kids[0]);
@@ -16,7 +16,7 @@ module.exports = function hackerNews(req, res) {
         topCommentText = topCommentText.replace(/<i>&gt;/, '<i> Quote: ');
         topCommentText = topCommentText.slice(0,topCommentText.indexOf('<p>', topCommentText.indexOf('<p>')+1));
         topCommentText = html2text.fromString(topCommentText);
-        summary += 'Top Comment: ' + topCommentText + '\n';
+        summary += 'Top Comment: ' + topCommentText + ' ';
       }
     }
   });
