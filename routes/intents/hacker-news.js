@@ -14,6 +14,7 @@ module.exports = function hackerNews(req, res) {
       if(topComment && topComment.text) {
         var topCommentText = topComment.text;
         topCommentText = topCommentText.replace(/<i>&gt;/, '<i> Quote: ');
+        topCommentText = topCommentText.replace(/(<p>)?<pre>.*<\/pre>/, '');
         topCommentText = topCommentText.slice(0,topCommentText.indexOf('<p>', topCommentText.indexOf('<p>')+1));
         topCommentText = html2text.fromString(topCommentText);
         topCommentText = topCommentText.replace(/\n/g, ' ');
