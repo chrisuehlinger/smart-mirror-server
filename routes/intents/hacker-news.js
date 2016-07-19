@@ -7,7 +7,7 @@ module.exports = function hackerNews(req, res) {
   var summary = 'Today\'s Top Hacker News Stories: ';
   api.getTopStories().slice(0,10).forEach(function(id, i){ 
     var story = api.getItem(id);
-    summary += 'Number ' + (i+1) + ': ' + story.title + ' ';
+    summary += 'Number ' + (i+1) + ': ' + story.title + '.\n';
     
     if(story.kids && story.kids.length) {
       var topComment = api.getItem(story.kids[0]);
@@ -17,8 +17,8 @@ module.exports = function hackerNews(req, res) {
         topCommentText = topCommentText.replace(/(<p>)?<pre>.*<\/pre>/, '');
         topCommentText = topCommentText.slice(0,topCommentText.indexOf('<p>', topCommentText.indexOf('<p>')+1));
         topCommentText = html2text.fromString(topCommentText);
-        topCommentText = topCommentText.replace(/\n/g, ' ');
-        summary += 'Top Comment: ' + topCommentText + ' ';
+        // topCommentText = topCommentText.replace(/\n/g, ' ');
+        summary += 'Top Comment: ' + topCommentText + '.\n';
       }
     }
   });
