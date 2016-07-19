@@ -1,43 +1,81 @@
 var api = require("hackernews-api");
+var request = require('request');
 var html2text = require("html-to-text");
 
 module.exports = function hackerNews(req, res) {
-  //TODO: Make all of this async, this could probably perform much better.
 
-  var summary = '<s>Today\'s Top Hacker News Stories:</s>';
-  api.getTopStories().slice(0,10).forEach(function(id, i){ 
-    var story = api.getItem(id);
-    summary += '<s>Number ' + (i+1) + ': ' + story.title + '</s>';
-    
-    if(story.kids && story.kids.length) {
-      var topComment = api.getItem(story.kids[0]);
-      if(topComment && topComment.text) {
-        var topCommentText = topComment.text;
-        topCommentText = topCommentText.replace(/<i>&gt;/, '<i> Quote: ');
-        topCommentText = topCommentText.replace(/(<p>)?<pre>.*<\/pre>/, '');
-        topCommentText = topCommentText.slice(0,topCommentText.indexOf('<p>', topCommentText.indexOf('<p>')+1));
-        topCommentText = html2text.fromString(topCommentText);
-        topCommentText = topCommentText.replace(/\n+/g, ' ');
-        summary += '<s>Top Comment:</s>' + topCommentText + ' ';
-      }
+  var summary = 'Today\'s Top Hacker News Stories:';
+  var LIMIT = 10, finished = 0;
+  var storySummaries = (new Array(LIMIT)).map(function(){return ''});
+
+  request('https://hacker-news.firebaseio.com/v0/topstories.json', function(error, response, body){
+    if(error) {
+      console.error(error);
+      summary = 'There was an error trying to retrieve the weather';
+      res.end();
+    } else {
+      var stories = JSON.parse(body);
+      stories.slice(0,LIMIT).forEach(function(id, i){ 
+        request('https://hacker-news.firebaseio.com/v0/item/' + id + '.json', function(error, response, body){
+          if(error) {
+            finished++;
+            console.error(error);
+          } else {
+            var story = JSON.parse(body);
+            storySummaries[i] += '<s>Number ' + (i+1) + ': ' + story.title + '</s>';
+            
+            if(story.kids && story.kids.length) {
+              request('https://hacker-news.firebaseio.com/v0/item/' + story.kids[0] + '.json', function(error, response, body){
+                if(error) {
+                  console.error(error);
+                } else {
+                  var topComment = JSON.parse(body);
+                  if(topComment && topComment.text) {
+                    var topCommentText = topComment.text;
+                    topCommentText = topCommentText.replace(/<i>&gt;/, '<i> Quote: ');
+                    topCommentText = topCommentText.replace(/(<p>)?<pre>.*<\/pre>/, '');
+                    topCommentText = topCommentText.slice(0,topCommentText.indexOf('<p>', topCommentText.indexOf('<p>')+1));
+                    topCommentText = html2text.fromString(topCommentText);
+                    topCommentText = topCommentText.replace(/\n+/g, ' ');
+                    storySummaries[i] += '<s>Top Comment:</s>' + topCommentText + ' ';
+                  }
+                }
+
+                finished++;
+                if(finished >= LIMIT) {
+                  sendItBack();
+                }
+              });
+            } else {
+              finished++;
+              if(finished >= LIMIT) {
+                sendItBack();
+              }
+            }
+          }
+        });
+      });
     }
   });
-    
-  res.json({
-    "version": "1.0",
-    "response": {
-      "outputSpeech": {
-        "type": "SSML",
-        "ssml": '<speak>' + summary + '</speak>' 
+
+  function sendItBack() {
+    summary += storySummaries.join(' ');
+    res.json({
+      "version": "1.0",
+      "response": {
+        "outputSpeech": {
+          "type": "SSML",
+          "ssml": '<speak>' + summary + '</speak>' 
+        },
+        "card": {
+          "type": "Simple",
+          "title": "HelloWorld",
+          "content": summary
+        },
+          "shouldEndSession": true
       },
-      "card": {
-        "type": "Simple",
-        "title": "HelloWorld",
-        "content": summary
-      },
-        "shouldEndSession": true
-    },
-    "sessionAttributes": {}
-  });
-  res.end();
+      "sessionAttributes": {}
+    });
+    res.end();
+  }
 };
