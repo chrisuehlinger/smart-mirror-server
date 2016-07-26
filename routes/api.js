@@ -3,6 +3,7 @@ var router = express.Router();
 
 var weather = require('./intents/weather');
 var hackerNews = require('./intents/hacker-news');
+var briefing = require('./intents/briefing')
 
 router.all('/weather', function(req, res) {
     weather(function(summary){
@@ -18,6 +19,12 @@ router.all('/hacker-news-top', function(req, res) {
 
 router.all('/hacker-news-full', function(req, res) {
     hackerNews.topStoriesWithComment(function(summary){
+        res.send(summary);
+    });
+});
+
+router.all('/briefing', function(req, res) {
+    briefing(function(summary){
         res.send(summary);
     });
 });

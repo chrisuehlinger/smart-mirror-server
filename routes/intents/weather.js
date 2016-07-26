@@ -12,7 +12,7 @@ module.exports = function weather(callback) {
       var summary = 'Right now it is ' + Math.round(forecast.currently.apparentTemperature) + ' and ' + forecast.currently.summary +
         '. Today, ' + forecast.daily.data[0].summary.slice(0,-1) + 
         ', with a high of ' + Math.round(forecast.daily.data[0].apparentTemperatureMax) + 
-        ' and a low of ' + Math.round(forecast.daily.data[0].apparentTemperatureMin);
+        ' and a low of ' + Math.round(forecast.daily.data[0].apparentTemperatureMin) + '.';
     }
 
     callback(summary);

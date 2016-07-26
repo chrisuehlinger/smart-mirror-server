@@ -3,6 +3,7 @@ var router = express.Router();
 
 var weather = require('./intents/weather');
 var hackerNews = require('./intents/hacker-news');
+var briefing = require('./intents/briefing');
 
 router.post('/', function(req, res) {
 
@@ -17,6 +18,11 @@ router.post('/', function(req, res) {
           outputSpeechType: 'SSML',
           cardTitle: 'Today\'s Top Hacker News Stories',
           fn: hackerNews.topStories
+        },
+        Briefing: {
+          outputSpeechType: 'SSML',
+          cardTitle: 'Daily Briefing',
+          fn: briefing
         },
         NoIntent: {
           outputSpeechType: 'PlainText',
