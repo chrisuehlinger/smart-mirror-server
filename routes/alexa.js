@@ -8,9 +8,9 @@ var hackerNews = require('./intents/hacker-news');
 router.post('/', function(req, res) {
   var intent = req.body.request.intent;
   console.log(intent.name);
-  if(intent.name === 'WeatherIntent') {
+  if(intent.name === 'Weather') {
     weather(req, res);
-  } else if(intent.name === 'HackerNewsIntent') {
+  } else if(intent.name === 'HackerNewsTopStories') {
     hackerNews.topStories(req, res);
   } else {
     res.json({
