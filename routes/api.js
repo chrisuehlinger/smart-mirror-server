@@ -4,9 +4,22 @@ var router = express.Router();
 var weather = require('./intents/weather');
 var hackerNews = require('./intents/hacker-news');
 
-/* GET users listing. */
-router.all('/weather', weather);
-router.all('/hacker-news-top', hackerNews.topStories);
-router.all('/hacker-news-full', hackerNews.topStoriesWithComment);
+router.all('/weather', function(req, res) {
+    weather(function(summary){
+        res.send(summary);
+    });
+});
+
+router.all('/hacker-news-top', function(req, res) {
+    hackerNews.topStories(function(summary){
+        res.send(summary);
+    });
+});
+
+router.all('/hacker-news-full', function(req, res) {
+    hackerNews.topStoriesWithComment(function(summary){
+        res.send(summary);
+    });
+});
 
 module.exports = router;

@@ -4,35 +4,49 @@ var router = express.Router();
 var weather = require('./intents/weather');
 var hackerNews = require('./intents/hacker-news');
 
-/* GET users listing. */
 router.post('/', function(req, res) {
-  var intent = req.body.request.intent;
-  console.log(intent.name);
-  if(intent.name === 'Weather') {
-    weather(req, res);
-  } else if(intent.name === 'HackerNewsTopStories') {
-    hackerNews.topStories(req, res);
-  } else {
+  var intentDictionary = {
+    Weather: {
+      outputSpeechType: 'PlainText',
+      cardTitle: 'Today\'s Weather',
+      fn: weather
+    },
+    HackerNewsTopStories: {
+      outputSpeechType: 'SSML',
+      cardTitle: 'Today\'s Top Hacker News Stories',
+      fn: hackerNews.topStories
+    },
+    NoIntent: {
+      outputSpeechType: 'PlainText',
+      cardTitle: intent.name || 'No Intent',
+      fn: function(callback){
+        callback('Intent "' + intent.name +'" not recognized');
+      }
+    }
+  };
+
+
+  var intent = req.body.request.intent,
+      intentKey = intentDictionary[intent.name] ? intent.name : 'NoIntent';
+
+  intentDictionary[intentKey].fn(function(summary){
     res.json({
       "version": "1.0",
       "response": {
         "outputSpeech": {
-          "type": "PlainText",
-          "text": "Sure thing, " + (intent.name || 'No intent') + ' activated.'
+          "type": intentDictionary[intentKey].outputSpeechType,
+          "text": summary
         },
         "card": {
           "type": "Simple",
-          "title": "HelloWorld",
-          "content": "Welcome to the Alexa Skills Kit, you can say hello"
+          "title": intentDictionary[intentKey].cardTitle,
+          "content": summary
         },
         "shouldEndSession": true
       },
       "sessionAttributes": {}
     });
-    res.end();
-  }
-
-  
+  });
 });
 
 module.exports = router;

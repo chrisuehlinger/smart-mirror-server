@@ -2,7 +2,7 @@ var api = require("hackernews-api");
 var request = require('request');
 var html2text = require("html-to-text");
 
-function topStories(req, res){
+function topStories(callback){
 
   var summary = 'Today\'s Top Hacker News Stories:';
   var LIMIT = 10, finished = 0;
@@ -16,10 +16,10 @@ function topStories(req, res){
     if(error) {
       console.error(error);
       summary = 'There was an error trying to retrieve the top Hacker News stories';
-      res.end();
+      callback(summary);
     } else {
       var stories = JSON.parse(body);
-      stories.slice(0,LIMIT).forEach(function(id, i){ 
+      stories.slice(0, LIMIT).forEach(function(id, i){ 
         request('https://hacker-news.firebaseio.com/v0/item/' + id + '.json', function(error, response, body){
           if(error) {
             console.error(error);
@@ -38,31 +38,15 @@ function topStories(req, res){
 
   function sendItBack() {
     summary += storySummaries.join(' ');
-    res.json({
-      "version": "1.0",
-      "response": {
-        "outputSpeech": {
-          "type": "SSML",
-          "ssml": '<speak>' + summary + '</speak>' 
-        },
-        "card": {
-          "type": "Simple",
-          "title": "Hacker News Top Stories",
-          "content": summary
-        },
-          "shouldEndSession": true
-      },
-      "sessionAttributes": {}
-    });
-    res.end();
+    callback(summary);
   }
 }
 
-function topComment(req, res){
+function topComment(callback){
    //TODO: This one is parameterized using Slots, need to figure out how to use those
 }
 
-function topStoriesWithComment(req, res) {
+function topStoriesWithComment(callback) {
 
   var summary = 'Today\'s Top Hacker News Stories:';
   var LIMIT = 10, finished = 0;
@@ -75,7 +59,7 @@ function topStoriesWithComment(req, res) {
     if(error) {
       console.error(error);
       summary = 'There was an error trying to retrieve the top Hacker News stories';
-      res.end();
+      callback(summary);
     } else {
       var stories = JSON.parse(body);
       stories.slice(0,LIMIT).forEach(function(id, i){ 
@@ -123,23 +107,7 @@ function topStoriesWithComment(req, res) {
 
   function sendItBack() {
     summary += storySummaries.join(' ');
-    res.json({
-      "version": "1.0",
-      "response": {
-        "outputSpeech": {
-          "type": "SSML",
-          "ssml": '<speak>' + summary + '</speak>' 
-        },
-        "card": {
-          "type": "Simple",
-          "title": "HelloWorld",
-          "content": summary
-        },
-          "shouldEndSession": true
-      },
-      "sessionAttributes": {}
-    });
-    res.end();
+    callback(summary);
   }
 };
 
