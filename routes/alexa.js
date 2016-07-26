@@ -19,6 +19,11 @@ router.post('/', function(req, res) {
           cardTitle: 'Today\'s Top Hacker News Stories',
           fn: hackerNews.topStories
         },
+        HackerNewsTopComment: {
+          outputSpeechType: 'SSML',
+          cardTitle: 'Hacker News Comment',
+          fn: hackerNews.topComment
+        },
         Briefing: {
           outputSpeechType: 'SSML',
           cardTitle: 'Daily Briefing',
@@ -51,7 +56,7 @@ router.post('/', function(req, res) {
       },
       "sessionAttributes": {}
     });
-  });
+  }, intent.slots);
 });
 
 module.exports = router;
