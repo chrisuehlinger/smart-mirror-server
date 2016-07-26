@@ -2,16 +2,79 @@ var api = require("hackernews-api");
 var request = require('request');
 var html2text = require("html-to-text");
 
-module.exports = function hackerNews(req, res) {
+function topStories(req, res){
 
   var summary = 'Today\'s Top Hacker News Stories:';
   var LIMIT = 10, finished = 0;
-  var storySummaries = (new Array(LIMIT)).map(function(){return ''});
+  var storySummaries = [];
+  for(var i = 0; i < LIMIT; i++) {
+    storySummaries.push('');
+  }
+
 
   request('https://hacker-news.firebaseio.com/v0/topstories.json', function(error, response, body){
     if(error) {
       console.error(error);
-      summary = 'There was an error trying to retrieve the weather';
+      summary = 'There was an error trying to retrieve the top Hacker News stories';
+      res.end();
+    } else {
+      var stories = JSON.parse(body);
+      stories.slice(0,LIMIT).forEach(function(id, i){ 
+        request('https://hacker-news.firebaseio.com/v0/item/' + id + '.json', function(error, response, body){
+          if(error) {
+            console.error(error);
+          } else {
+            var story = JSON.parse(body);
+            storySummaries[i] += '<s>Number ' + (i+1) + ': ' + story.title + '</s>';
+          }
+          finished++;
+          if(finished >= LIMIT) {
+            sendItBack();
+          }
+        });
+      });
+    }
+  });
+
+  function sendItBack() {
+    summary += storySummaries.join(' ');
+    res.json({
+      "version": "1.0",
+      "response": {
+        "outputSpeech": {
+          "type": "SSML",
+          "ssml": '<speak>' + summary + '</speak>' 
+        },
+        "card": {
+          "type": "Simple",
+          "title": "Hacker News Top Stories",
+          "content": summary
+        },
+          "shouldEndSession": true
+      },
+      "sessionAttributes": {}
+    });
+    res.end();
+  }
+}
+
+function topComment(req, res){
+   //TODO: This one is parameterized using Slots, need to figure out how to use those
+}
+
+function topStoriesWithComment(req, res) {
+
+  var summary = 'Today\'s Top Hacker News Stories:';
+  var LIMIT = 10, finished = 0;
+  var storySummaries = [];
+  for(var i = 0; i < LIMIT; i++) {
+    storySummaries.push('');
+  }
+
+  request('https://hacker-news.firebaseio.com/v0/topstories.json', function(error, response, body){
+    if(error) {
+      console.error(error);
+      summary = 'There was an error trying to retrieve the top Hacker News stories';
       res.end();
     } else {
       var stories = JSON.parse(body);
@@ -78,4 +141,10 @@ module.exports = function hackerNews(req, res) {
     });
     res.end();
   }
+};
+
+module.exports = {
+  topStories: topStories,
+  topComment: topComment,
+  topStoriesWithComment: topStoriesWithComment
 };

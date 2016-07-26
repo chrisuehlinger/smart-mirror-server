@@ -11,7 +11,7 @@ router.post('/', function(req, res) {
   if(intent.name === 'WeatherIntent') {
     weather(req, res);
   } else if(intent.name === 'HackerNewsIntent') {
-    hackerNews(req, res);
+    hackerNews.topStories(req, res);
   } else {
     res.json({
       "version": "1.0",
