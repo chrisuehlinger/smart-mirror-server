@@ -41,7 +41,7 @@ function topStories(callback){
 
   function sendItBack() {
     summary += spokenSummaries.join(' ');
-    socketing.socket && socketing.socket.emit('hn-topstories', JSON.stringify(storySummaries));
+    socketing.socket && socketing.socket.emit('hn-topstories', encodeURIComponent(JSON.stringify(storySummaries)));
     callback(summary);
   }
 }
@@ -81,10 +81,10 @@ function topComment(callback, slots){
                   topCommentText = html2text.fromString(topCommentText);
                   topCommentText = topCommentText.replace(/\n+/g, ' ');
                   summary= '<s>Top Comment:</s>' + topCommentText + ' ';
-                  socketing.socket && socketing.socket.emit('hn-topcomment',JSON.stringify({
+                  socketing.socket && socketing.socket.emit('hn-topcomment', encodeURIComponent(JSON.stringify({
                     story: story,
                     comment: topComment
-                  }));
+                  })));
                   callback(summary);
                 } else {
                   summary = 'There are no comments on that Hacker News story';
