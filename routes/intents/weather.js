@@ -1,4 +1,5 @@
 var request = require('request');
+var socketing = require('../../sockets');
 
 module.exports = function weather(callback) {
   request('https://api.forecast.io/forecast/' + process.env.FORECAST_IO_API_KEY + '/39.2882,-76.6286', function(error, response, body){
@@ -14,7 +15,7 @@ module.exports = function weather(callback) {
         ', with a high of ' + Math.round(forecast.daily.data[0].apparentTemperatureMax) + 
         ' and a low of ' + Math.round(forecast.daily.data[0].apparentTemperatureMin) + '.';
     }
-
+    socketing.socket && socketing.socket.emit('weather', JSON.stringify(forecast));
     callback(summary);
   });
 };

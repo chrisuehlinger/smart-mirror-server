@@ -80,17 +80,7 @@ var server = app.listen(app.get('port'), function() {
 });
 
 // Socket IO setup
-
-var io = require('socket.io')(server);
-
-io.sockets.on('connection', function (socket) {
-    console.log('socket connected');
-
-    socket.on('disconnect', function () {
-        console.log('socket disconnected');
-    });
-
-    socket.emit('text', 'wow. such event. very real time.');
-});
+var sockets = require('./sockets');
+sockets.init(server);
 
 module.exports = app;

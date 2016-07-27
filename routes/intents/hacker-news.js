@@ -1,14 +1,16 @@
 var api = require("hackernews-api");
 var request = require('request');
 var html2text = require("html-to-text");
+var socketing = require('../../sockets');
 
 function topStories(callback){
 
   var summary = 'Today\'s Top Hacker News Stories:';
   var LIMIT = 10, finished = 0;
-  var storySummaries = [];
+  var spokenSummaries = [], storySummaries = [];
   for(var i = 0; i < LIMIT; i++) {
-    storySummaries.push('');
+    spokenSummaries.push('');
+    storySummaries.push({});
   }
 
 
@@ -25,7 +27,8 @@ function topStories(callback){
             console.error(error);
           } else {
             var story = JSON.parse(body);
-            storySummaries[i] += '<s>Number ' + (i+1) + ': ' + story.title + '</s>';
+            spokenSummaries[i] += '<s>Number ' + (i+1) + ': ' + story.title + '</s>';
+            storySummaries[i] = story;
           }
           finished++;
           if(finished >= LIMIT) {
@@ -37,7 +40,8 @@ function topStories(callback){
   });
 
   function sendItBack() {
-    summary += storySummaries.join(' ');
+    summary += spokenSummaries.join(' ');
+    socketing.socket && socketing.socket.emit('hn-topstories', JSON.stringify(storySummaries));
     callback(summary);
   }
 }
@@ -77,6 +81,10 @@ function topComment(callback, slots){
                   topCommentText = html2text.fromString(topCommentText);
                   topCommentText = topCommentText.replace(/\n+/g, ' ');
                   summary= '<s>Top Comment:</s>' + topCommentText + ' ';
+                  socketing.socket && socketing.socket.emit('hn-topcomment',JSON.stringify({
+                    story: story,
+                    comment: topComment
+                  }));
                   callback(summary);
                 } else {
                   summary = 'There are no comments on that Hacker News story';
@@ -98,9 +106,9 @@ function topStoriesWithComment(callback) {
 
   var summary = 'Today\'s Top Hacker News Stories:';
   var LIMIT = 10, finished = 0;
-  var storySummaries = [];
+  var spokenSummaries = [];
   for(var i = 0; i < LIMIT; i++) {
-    storySummaries.push('');
+    spokenSummaries.push('');
   }
 
   request('https://hacker-news.firebaseio.com/v0/topstories.json', function(error, response, body){
@@ -117,7 +125,7 @@ function topStoriesWithComment(callback) {
             console.error(error);
           } else {
             var story = JSON.parse(body);
-            storySummaries[i] += '<s>Number ' + (i+1) + ': ' + story.title + '</s>';
+            spokenSummaries[i] += '<s>Number ' + (i+1) + ': ' + story.title + '</s>';
             
             if(story.kids && story.kids.length) {
               request('https://hacker-news.firebaseio.com/v0/item/' + story.kids[0] + '.json', function(error, response, body){
@@ -132,7 +140,7 @@ function topStoriesWithComment(callback) {
                     topCommentText = topCommentText.slice(0,topCommentText.indexOf('<p>', topCommentText.indexOf('<p>')+1));
                     topCommentText = html2text.fromString(topCommentText);
                     topCommentText = topCommentText.replace(/\n+/g, ' ');
-                    storySummaries[i] += '<s>Top Comment:</s>' + topCommentText + ' ';
+                    spokenSummaries[i] += '<s>Top Comment:</s>' + topCommentText + ' ';
                   }
                 }
 
@@ -154,7 +162,7 @@ function topStoriesWithComment(callback) {
   });
 
   function sendItBack() {
-    summary += storySummaries.join(' ');
+    summary += spokenSummaries.join(' ');
     callback(summary);
   }
 };
