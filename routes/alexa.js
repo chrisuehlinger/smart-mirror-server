@@ -46,7 +46,7 @@ router.post('/', function(req, res) {
         "outputSpeech": {
           "type": intentDictionary[intentKey].outputSpeechType,
           "text": summary,
-          "ssml": summary
+          "ssml": '<speak>' + summary + '</speak>'
         },
         "card": {
           "type": "Simple",
