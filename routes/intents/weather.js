@@ -15,7 +15,7 @@ module.exports = function weather(callback) {
         ', with a high of ' + Math.round(forecast.daily.data[0].apparentTemperatureMax) + 
         ' and a low of ' + Math.round(forecast.daily.data[0].apparentTemperatureMin) + '.';
     }
-    socketing.socket && socketing.socket.emit('weather', JSON.stringify(forecast));
+    socketing.socket && socketing.socket.emit('weather', JSON.stringify(forecast).replace('\u2028', '\\u2028').replace('\u2029', '\\u2029'));
     callback(summary);
   });
 };
