@@ -10,7 +10,7 @@ module.exports = {
                 console.log('socket disconnected');
             });
 
-            // this.socket.emit('text', 'wow. such event. very real time.');
+            this.socket.emit('text', 'wow. such event. very real time.');
         }.bind(this));
     }
 };
