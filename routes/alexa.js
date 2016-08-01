@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var weather = require('./intents/weather');
+var clearScreen = require('./intents/clear');
 var hackerNews = require('./intents/hacker-news');
 var briefing = require('./intents/briefing');
 
@@ -9,6 +10,11 @@ router.post('/', function(req, res) {
 
   var intent = req.body.request.intent,
       intentDictionary = {
+        Clear: {
+          outputSpeechType: 'PlainText',
+          cardTitle: 'Clearing Mirror...',
+          fn: clearScreen
+        },
         Weather: {
           outputSpeechType: 'PlainText',
           cardTitle: 'Today\'s Weather',
