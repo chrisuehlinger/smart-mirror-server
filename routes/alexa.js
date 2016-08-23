@@ -5,6 +5,7 @@ var weather = require('./intents/weather');
 var clearScreen = require('./intents/clear');
 var hackerNews = require('./intents/hacker-news');
 var briefing = require('./intents/briefing');
+var refresh = require('./intents/refresh');
 
 router.post('/', function(req, res) {
 
@@ -34,6 +35,11 @@ router.post('/', function(req, res) {
           outputSpeechType: 'SSML',
           cardTitle: 'Daily Briefing',
           fn: briefing
+        },
+        Refresh: {
+          outputSpeechType: 'SSML',
+          cardTitle: 'Refresh App',
+          fn: refresh
         },
         NoIntent: {
           outputSpeechType: 'PlainText',

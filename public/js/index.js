@@ -89,6 +89,10 @@ function socketStuff() {
         console.log(data);
         displayTopComment(data);
     });
+    
+    socket.on('refresh', function() {
+        location.reload();
+    });
 
     socket.on('disconnect', function(){
         // alert('socket disconnected');

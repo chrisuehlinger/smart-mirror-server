@@ -5,6 +5,7 @@ var clearScreen = require('./intents/clear');
 var weather = require('./intents/weather');
 var hackerNews = require('./intents/hacker-news');
 var briefing = require('./intents/briefing');
+var refresh = require('./intents/refresh');
 
 router.all('/clear', function(req, res) {
     clearScreen(function(summary){
@@ -42,6 +43,12 @@ router.all('/hacker-news-full', function(req, res) {
 
 router.all('/briefing', function(req, res) {
     briefing(function(summary){
+        res.send(summary);
+    });
+});
+
+router.all('/refresh', function(req, res) {
+    refresh(function(summary){
         res.send(summary);
     });
 });
