@@ -46,8 +46,8 @@ var app = {
         // admRegister();
         socketConnect();
         app.receivedEvent('deviceready');
-        clearTimeout(refreshTimeout);
-        refreshTimeout = setTimeout(refresh, refreshTime);
+        // clearTimeout(refreshTimeout);
+        // refreshTimeout = setTimeout(refresh, refreshTime);
         this.tick();
         setInterval(this.tick.bind(this),100);
     },
@@ -76,32 +76,32 @@ function socketStuff() {
     socket.on('clear-screen', function() {
         console.log('Clearing screen...');
         $('.display-area').fadeOut(500);
-        clearTimeout(refreshTimeout);
-        refreshTimeout = setTimeout(refresh, refreshTime);
+        // clearTimeout(refreshTimeout);
+        // refreshTimeout = setTimeout(refresh, refreshTime);
     });
     
     socket.on('weather', function(data) {
         data = JSON.parse(decodeURIComponent(data));
         console.log(data);
         displayWeather(data);
-        clearTimeout(refreshTimeout);
-        refreshTimeout = setTimeout(refresh, refreshTime);
+        // clearTimeout(refreshTimeout);
+        // refreshTimeout = setTimeout(refresh, refreshTime);
     });
     
     socket.on('hn-topstories', function(data) {
         data = JSON.parse(decodeURIComponent(data));
         console.log(data);
         displayTopStories(data);
-        clearTimeout(refreshTimeout);
-        refreshTimeout = setTimeout(refresh, refreshTime);
+        // clearTimeout(refreshTimeout);
+        // refreshTimeout = setTimeout(refresh, refreshTime);
     });
     
     socket.on('hn-topcomment', function(data) {
         data = JSON.parse(decodeURIComponent(data));
         console.log(data);
         displayTopComment(data);
-        clearTimeout(refreshTimeout);
-        refreshTimeout = setTimeout(refresh, refreshTime);
+        // clearTimeout(refreshTimeout);
+        // refreshTimeout = setTimeout(refresh, refreshTime);
     });
     
     socket.on('refresh', refresh);
@@ -113,22 +113,22 @@ function socketStuff() {
     });
 }
 
-var pushNotification;
-function admRegister(){
-    pushNotification = window.plugins.pushNotification;
-    if(device.platform === 'amazon-fireos'){
-        pushNotification.register(registerSuccess, registerError, {
-            ecb:'onNotification'
-        });
-    }
-}
+// var pushNotification;
+// function admRegister(){
+//     pushNotification = window.plugins.pushNotification;
+//     if(device.platform === 'amazon-fireos'){
+//         pushNotification.register(registerSuccess, registerError, {
+//             ecb:'onNotification'
+//         });
+//     }
+// }
 
-function registerSuccess(result){
+// function registerSuccess(result){
 
-}
+// }
 
-function registerError(error) {
-    alert(error);
-}
+// function registerError(error) {
+//     alert(error);
+// }
 
 app.initialize();
