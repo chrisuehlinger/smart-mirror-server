@@ -17,9 +17,7 @@
  * under the License.
  */
 
-window.onerror = function(message, source, lineno, colno, error){
-    alert(lineno + ': ' + message);
-}
+
 
 function refresh(){
     location.reload();
