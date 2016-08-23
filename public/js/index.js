@@ -17,8 +17,8 @@
  * under the License.
  */
 
-window.onerror = function(e){
-    alert(e);
+window.onerror = function(message, source, lineno, colno, error){
+    alert(lineno + ': ' + message);
 }
 
 function refresh(){
@@ -54,6 +54,7 @@ var app = {
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         // socketConnect();
+        alert(id);
         console.log('Received Event: ' + id);
     },
     tick: function(){
