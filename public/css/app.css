@@ -1,0 +1,149 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+* {
+    -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+}
+
+body {
+    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
+    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+    background: black;
+    font-family:'Work Sans', Helvetica, Arial, sans-serif;
+    font-size:12px;
+    height:100%;
+    margin:0px;
+    padding:0px;
+    text-transform:uppercase;
+    width:100%;
+    color: #fff;
+    text-align: right;
+}
+
+.current-time {
+    font-size: 128px;
+    font-weight: 100;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.tick text {
+  fill: #fff;
+}
+
+.display-area {
+  margin: 0 auto;
+}
+
+.hn-top-stories {
+    text-align: left;
+    margin: 0 50px;
+    text-transform: none;
+    padding-left: 0px;
+}
+
+.hn-top-stories li {
+  list-style: none;
+  white-space: nowrap;
+  margin-top: 10px;
+}
+
+.hn-top-stories .story-number {
+  display: inline-flex;
+  vertical-align: middle;
+  width: 25px;
+  height: 25px;
+  background: #fff;
+  color: #000;
+  border-radius: 25px;
+  font-size: 20px;
+  font-weight: 700;
+  justify-content: center;
+  align-items: center;
+  line-height: 0.75;
+  margin-right: 10px;
+}
+
+.hn-top-stories .story-block {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.hn-top-stories .story-title {
+  display: block;
+  white-space: normal;
+  font-size: 20px;
+}
+
+.hn-top-stories .story-comments {
+  display: inline-block;
+}
+
+.hn-top-stories .story-votes {
+  display: inline-block;
+}
+
+.hn-top-stories .story-votes:before {
+  content: " - ";
+  margin-left: 5px;
+}
+
+.hn-top-comment {
+  text-align: left;
+  margin: 0 50px;
+  text-transform: none;
+  line-height: 1.5;
+}
+
+.hn-top-comment h2 {
+  font-size: 24px;
+}
+
+.hn-top-comment p{
+  font-size: 18px;
+}
+
+.current-conditions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  font-size: 72px;
+  margin: 0 auto -20px;
+  max-width: 600px;
+}
+
+svg {    
+  margin: 0 auto;
+  display: block;
+}
