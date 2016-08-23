@@ -21,7 +21,11 @@ window.onerror = function(e){
     alert(e);
 }
 
-var socket;
+function refresh(){
+    location.reload();
+}
+
+var socket, refreshTimeout, refreshTime = 15*60*1000;
 var app = {
     // Application Constructor
     initialize: function() {
@@ -42,13 +46,15 @@ var app = {
         // admRegister();
         socketConnect();
         app.receivedEvent('deviceready');
+        clearTimeout(refreshTimeout);
+        refreshTimeout = setTimeout(refresh, refreshTime);
+        this.tick();
+        setInterval(this.tick.bind(this),100);
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        socketConnect();
+        // socketConnect();
         console.log('Received Event: ' + id);
-        this.tick();
-        setInterval(this.tick.bind(this),100);
     },
     tick: function(){
         document.querySelector('.current-time').innerText = moment().format('h:mm a');
@@ -70,29 +76,35 @@ function socketStuff() {
     socket.on('clear-screen', function() {
         console.log('Clearing screen...');
         $('.display-area').fadeOut(500);
+        clearTimeout(refreshTimeout);
+        refreshTimeout = setTimeout(refresh, refreshTime);
     });
     
     socket.on('weather', function(data) {
         data = JSON.parse(decodeURIComponent(data));
         console.log(data);
         displayWeather(data);
+        clearTimeout(refreshTimeout);
+        refreshTimeout = setTimeout(refresh, refreshTime);
     });
     
     socket.on('hn-topstories', function(data) {
         data = JSON.parse(decodeURIComponent(data));
         console.log(data);
         displayTopStories(data);
+        clearTimeout(refreshTimeout);
+        refreshTimeout = setTimeout(refresh, refreshTime);
     });
     
     socket.on('hn-topcomment', function(data) {
         data = JSON.parse(decodeURIComponent(data));
         console.log(data);
         displayTopComment(data);
+        clearTimeout(refreshTimeout);
+        refreshTimeout = setTimeout(refresh, refreshTime);
     });
     
-    socket.on('refresh', function() {
-        location.reload();
-    });
+    socket.on('refresh', refresh);
 
     socket.on('disconnect', function(){
         // alert('socket disconnected');
