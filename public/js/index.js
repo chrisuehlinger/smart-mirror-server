@@ -54,7 +54,6 @@ var app = {
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         // socketConnect();
-        alert(id);
         console.log('Received Event: ' + id);
     },
     tick: function(){
