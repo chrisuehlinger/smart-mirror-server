@@ -74,6 +74,7 @@ function socketStuff() {
         $('.display-area').fadeOut(500);
         clearTimeout(refreshTimeout);
         refreshTimeout = setTimeout(refresh, refreshTime);
+        window.currentMode = 'CLEAR';
     });
     
     socket.on('weather', function(data) {
@@ -82,6 +83,7 @@ function socketStuff() {
         displayWeather(data);
         clearTimeout(refreshTimeout);
         refreshTimeout = setTimeout(refresh, refreshTime);
+        window.currentMode = 'WEATHER';
     });
     
     socket.on('hn-topstories', function(data) {
@@ -90,6 +92,7 @@ function socketStuff() {
         displayTopStories(data);
         clearTimeout(refreshTimeout);
         refreshTimeout = setTimeout(refresh, refreshTime);
+        window.currentMode = 'HNTOPSTORIES';
     });
     
     socket.on('hn-topcomment', function(data) {
@@ -98,9 +101,17 @@ function socketStuff() {
         displayTopComment(data);
         clearTimeout(refreshTimeout);
         refreshTimeout = setTimeout(refresh, refreshTime);
+        window.currentMode = 'HNTOPCOMMENT';
     });
     
     socket.on('refresh', refresh);
+    
+    socket.on('ping-chart', function() {
+        displayPingChart();
+        clearTimeout(refreshTimeout);
+        refreshTimeout = setTimeout(refresh, refreshTime);
+        window.currentMode = 'PING';
+    });
 
     socket.on('disconnect', function(){
         // alert('socket disconnected');
