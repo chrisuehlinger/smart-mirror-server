@@ -2,7 +2,7 @@ var request = require('request');
 var socketing = require('../../sockets');
 
 module.exports = function weather(callback) {
-  request('https://api.forecast.io/forecast/' + process.env.FORECAST_IO_API_KEY + '/39.2882,-76.6286', function(error, response, body){
+  request('https://api.darksky.net/forecast/' + process.env.DARKSKY_API_KEY + '/39.2882,-76.6286', function(error, response, body){
     var summary;
     if(error) {
       console.error(error);
