@@ -6,6 +6,7 @@ var clearScreen = require('./intents/clear');
 var hackerNews = require('./intents/hacker-news');
 var briefing = require('./intents/briefing');
 var refresh = require('./intents/refresh');
+var pingChart = require('./intents/ping');
 
 router.post('/', function(req, res) {
 
@@ -40,6 +41,11 @@ router.post('/', function(req, res) {
           outputSpeechType: 'SSML',
           cardTitle: 'Refresh App',
           fn: refresh
+        },
+        Ping: {
+          outputSpeechType: 'SSML',
+          cardTitle: 'Display Ping Chart',
+          fn: pingChart
         },
         NoIntent: {
           outputSpeechType: 'PlainText',

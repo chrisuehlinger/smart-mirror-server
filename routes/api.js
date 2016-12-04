@@ -6,6 +6,7 @@ var weather = require('./intents/weather');
 var hackerNews = require('./intents/hacker-news');
 var briefing = require('./intents/briefing');
 var refresh = require('./intents/refresh');
+var pingChart = require('./intents/ping');
 
 router.all('/clear', function(req, res) {
     clearScreen(function(summary){
@@ -49,6 +50,12 @@ router.all('/briefing', function(req, res) {
 
 router.all('/refresh', function(req, res) {
     refresh(function(summary){
+        res.send(summary);
+    });
+});
+
+router.all('/ping', function(req, res) {
+    pingChart(function(summary){
         res.send(summary);
     });
 });
