@@ -58,7 +58,8 @@ var app = {
 };
 
 function socketConnect(){
-    socket = io.connect('https://infinite-sea-77086.herokuapp.com/');
+    socket = io.connect('https://[YOUR HOST NAME HERE]/');
+    // For use when debugging locally:
     // socket = io.connect('http://localhost:3001/');
     socket.on('connect', socketStuff);
 }
