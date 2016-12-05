@@ -34,7 +34,7 @@ function _displayWeather(allData) {
 
     var precipLine = d3.svg.line()
         .x(function(d) { return x(d.time); })
-        .y(function(d) { return precipY(d.precipProbability); })
+        .y(function(d) { return precipY(d.precipIntensity); })
         .interpolate("basis");
 
     var tempLine = d3.svg.line()
@@ -45,7 +45,7 @@ function _displayWeather(allData) {
     var precipArea = d3.svg.area()
         .x(function(d) { return x(d.time); })
         .y0(height)
-        .y1(function(d) { return precipY(d.precipProbability); })
+        .y1(function(d) { return precipY(d.precipIntensity); })
         .interpolate("basis");
 
     var tempArea = d3.svg.area()
@@ -155,7 +155,7 @@ function _displayWeather(allData) {
 
     function type(d) {
         d.time = 1000*d.time;
-        d.precipProbability = +d.precipProbability;
+        d.precipIntensity = +d.precipIntensity;
         return d;
     }
 };
